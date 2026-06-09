@@ -78,6 +78,20 @@ jobs:
           cd telegram-ingestion
           npm install
           node run-once.js
+                # JOB SCRAPER
+      - name: Clone job-scraper
+        run: |
+          git clone https://x-access-token:${{ secrets.TOKEN }}@github.com/stackbot42/job-scraper.git
+
+      - name: Run job-scraper
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          cd job-scraper
+          npm install
+          node scraper.js
       # ── COREJOB (runs last - takes 2 hours) ──
       - name: Setup Python
         uses: actions/setup-python@v5
