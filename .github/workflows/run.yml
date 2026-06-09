@@ -1,29 +1,26 @@
 name: Daily Task
 
 on:
-workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
-run:
-runs-on: ubuntu-latest
+  run:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
 
-```
-steps:
-  - name: Setup Node.js
-    uses: actions/setup-node@v4
-    with:
-      node-version: '22'
+      - name: Clone job-scraper
+        run: git clone https://x-access-token:${{ secrets.TOKEN }}@github.com/stackbot42/job-scraper.git
 
-  - name: Clone job-scraper
-    run: |
-      git clone https://x-access-token:${{ secrets.TOKEN }}@github.com/stackbot42/job-scraper.git
-
-  - name: Run job-scraper
-    env:
-      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-    run: |
-      cd job-scraper
-      npm install
-      node scraper.js
-```
+      - name: Run job-scraper
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          cd job-scraper
+          npm install
+          node scraper.js
